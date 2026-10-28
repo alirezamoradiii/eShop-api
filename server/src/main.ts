@@ -13,6 +13,13 @@ async function bootstrap() {
   app.use(compression());
   app.use(cookieParser());
 
+  app.enableCors({
+    origin: [process.env.CLIENT_ORIGIN ?? 'http://localhost:3000'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  });
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
