@@ -2,9 +2,11 @@ import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 import appConfig from '../configs/app.config.js';
+import dbConfig from '../configs/db.config.js';
 
 @Module({
   imports: [
@@ -13,7 +15,20 @@ import appConfig from '../configs/app.config.js';
       envFilePath: !process.env.NODE_ENV
         ? '.env'
         : `.env.${process.env.NODE_ENV}.local`,
-      load: [appConfig],
+      load: [appConfig, dbConfig],
+    }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        type: 'postgres',
+        host: config.getOrThrow<string>('dbConfig.host'),
+        port: config.getOrThrow<number>('dbConfig.port'),
+        username: config.getOrThrow<string>('dbConfig.user'),
+        password: config.getOrThrow<string>('dbConfig.password'),
+        database: config.getOrThrow<string>('dbConfig.database'),
+        autoLoadEntities: config.getOrThrow<boolean>('dbConfig.autoLoad'),
+        synchronize: config.getOrThrow<boolean>('dbConfig.sync'),
+      }),
     }),
   ],
   controllers: [AppController],
