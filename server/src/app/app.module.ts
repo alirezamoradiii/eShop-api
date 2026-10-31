@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import appConfig from '../configs/app.config.js';
 import dbConfig from '../configs/db.config.js';
+import { UsersModule } from '../modules/users/users.module.js';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import dbConfig from '../configs/db.config.js';
         synchronize: config.getOrThrow<boolean>('dbConfig.sync'),
       }),
     }),
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [
