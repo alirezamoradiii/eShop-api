@@ -7,4 +7,9 @@ import { AuthService } from './auth.service.js';
 @ApiTags('Auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  @Post('signup')
+  public signup(@Body() body: CreateUserDto) {
+    return this.authService.signup(body);
+  }
 }
