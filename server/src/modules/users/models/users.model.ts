@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { UsersRole } from './types/user-role.enum.js';
+import { Exclude } from 'class-transformer';
 
 @Entity('users')
 export class UserModel {
@@ -25,6 +26,7 @@ export class UserModel {
     length: 255,
     nullable: false,
   })
+  @Exclude()
   password: string;
 
   @Column({
