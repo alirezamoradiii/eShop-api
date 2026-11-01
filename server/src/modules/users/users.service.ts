@@ -10,7 +10,7 @@ export class UsersService {
     private readonly usersModel: Repository<UserModel>,
   ) {}
 
-  async findUsers(
+  public async findUsers(
     filters: Pick<
       FindOptionsWhere<UserModel>,
       'id' | 'email' | 'role' | 'created_at' | 'updated_at'
